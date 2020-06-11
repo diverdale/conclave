@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% import '/bootstrap/wtf.html' as wtf %}
+
+{% block content %}
+    <div class="container">
+        <div class="card" style="margin-top: 25px;">
+            <div class="card-header">
+                <h2>New Topic</h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {{ form.hidden_tag() }}
+                    {{ wtf.form_field(form.topic_title) }}
+                    {{ wtf.form_field(form.topic_category) }}
+                    {{ wtf.form_field(form.topic_content) }}
+                    {{ form.submit(class='btn btn-primary') }}
+                </form>
+                {% if form.errors %}
+                    {{ form.errors }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

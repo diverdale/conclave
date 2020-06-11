@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+    {%  with messages = get_flashed_messages() %}
+        {% if messages %}
+            {%  for message in messages %}
+                <div class="alert alert-success alert-dismissable fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+        <div class="card" style="margin-top: 25px;">
+            <div class="card-header">
+                <h4>{{ topic.topic_title }}
+                    <button title="Delete" class="btn btn-outline-danger" data-toggle="modal" data-target="#confirmDelete">
+                        <i class="far fa-trash-alt"></i>
+                    </button>
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-2 rounded border border-right">
+                        <p class="text-sm-left" style="font-size: smaller; padding:5px;">{{ op.user_username }}</p>
+                        <p class="text-sm-left" style="font-size: x-small;">{{ topic.topic_date.strftime('%Y-%m-%d') }}</p>
+                    </div>
+                    <div class="col-10">
+                        <p class="text-muted">{{ topic.topic_content|markdown }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item list-group-item-dark">
+                        <a href="{{ url_for('conclave.reply', topic_id=topic.id) }}" class="btn" style="text-decoration: none; font-size: small;"><i class="fas fa-reply"></i> Reply</a>
+                    </li>
+                    <li class="list-group-item list-group-item-dark">
+                        <a href="#" class="btn" style="text-decoration: none; font-size: small;"> <i class="far fa-comment-dots"></i> Quote</a>
+                    </li>
+                    {% if current_user.id == topic.topic_author %}
+                        <li class="list-group-item list-group-item-dark">
+                            <a href="{{ url_for('conclave.edit', topic_id=topic.id) }}" class="btn" style="text-decoration: none; font-size: small;"><i class="fas fa-edit"></i>Edit</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <br>
+        {% for reply in replies %}
+            <div class="card">
+                <div class="card-body">
+                     <p class="text-muted">{{ reply.reply_content|markdown }}</p>
+                </div>
+            <div class="card-footer">
+                <ul class="list-group list-group-horizontal">
+                    {% if current_user.id == reply.reply_author %}
+                        <li class="list-group-item list-group-item-dark">
+                            <a href="{{ url_for('conclave.reply_edit', reply_id=reply.id, topic_id=topic.id) }}" class="btn" style="text-decoration: none; font-size: small;"><i class="fas fa-edit"></i>Edit</a>
+                        </li>
+                        <li class="list-group-item list-group-item-dark">
+                            <a href="#" class="btn" style="text-decoration: none; font-size: small;"><i class="far fa-trash-alt"></i> Delete</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            </div>
+            <br>
+        {% endfor %}
+    </div>
+    <div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog" aria-labeledby="confirmDeleteLabel" aria-hidden="true" >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeleteLabel">
+                            Confirm Delete
+                        </h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Delete {{ topic.topic_title }}? This cannot be undone.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <form action="{{ url_for('conclave.delete', topic_id=topic.id) }}">
+                            <button type="submit" class="btn btn-primary">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block content %}
+     {%  with messages = get_flashed_messages() %}
+        {% if messages %}
+            {%  for message in messages %}
+                <div class="alert alert-success alert-dismissable fade show" role="alert">
+                    {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="jumbotron">
+        <form method="post" style="width: 50rem;">
+            {{ form.hidden_tag() }}
+            {{ wtf.form_field(form.user_username) }}
+            {{ wtf.form_field(form.user_email) }}
+            {{ wtf.form_field(form.user_password) }}
+            {{ wtf.form_field(form.pass_confirm) }}
+            {{ form.submit(class='btn btn-primary') }}
+        </form>
+    </div>
+{% endblock %}

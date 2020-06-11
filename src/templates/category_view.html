@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="card" style="margin-top: 25px;">
+            <div class="card-title">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ url_for('conclave.index') }}">Main</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            {{ category }}
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% if topics|length > 0 %}
+                        {% for topic in topics %}
+                            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <a href="{{ url_for('conclave.view', topic_id=topic.id) }}" class="stretched-link" style="text-decoration: none; font-size: medium;">{{ topic.topic_title }}</a>
+                                 {% if replies %}
+                                     <span class="badge badge-primary badge-pill">{{ replies[0][1] }}</span>
+                                 {% endif %}
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

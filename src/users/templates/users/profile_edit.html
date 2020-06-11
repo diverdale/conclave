@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% import '/bootstrap/wtf.html' as wtf %}
+
+{% block content %}
+    <div class="container">
+    {%  with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {%  for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissable fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+        <div class="card" style="margin-top: 25px;">
+            <div class="card-header">
+                <h4>My Profile</h4>
+                <button class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#changePassword">
+                    Change Password
+                </button>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {{ wtf.quick_form(form) }}
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="changePasswordLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <form method="post">
+                  <div class="form-group">
+                      {{ wtf.quick_form(change_pw_form) }}
+                  </div>
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

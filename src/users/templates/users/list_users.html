@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container" style="margin-top: 15px;">
+        {%  with messages = get_flashed_messages() %}
+        {% if messages %}
+            {%  for message in messages %}
+                <div class="alert alert-success alert-dismissable fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+        <ul class="list-group">
+            {% for user in users %}
+                <li class="list-group-item">
+                    {{ user.user_username }}
+                    <p class="text-muted" style="font-size: 12px;">{{ user.user_role }}</p>
+                    <a href="{{ url_for('users.edit', user_id=user.id) }}">
+                        <button class="btn btn-outline-primary btn-sm">
+                            <i class="far fa-edit"></i>
+                        </button>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
